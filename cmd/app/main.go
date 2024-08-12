@@ -26,6 +26,16 @@ func main() {
 	connectDB()
 
 	gin_handler := gin.Default()
+	gin_handler.LoadHTMLGlob("views/*")
+	gin_handler.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(
+			http.StatusOK,
+			"main.html",
+			gin.H {
+				"status": "success",
+			},
+		)
+	})
 
 	main_addr := config.GetEnv("ADDR_ROUTE", "localhost")
 	main_port := config.GetEnv("PORT", "8080")
