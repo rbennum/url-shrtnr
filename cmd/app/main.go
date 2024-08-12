@@ -16,6 +16,9 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/rbennum/url-shrtnr/config"
 	"github.com/rbennum/url-shrtnr/db"
+	"github.com/rbennum/url-shrtnr/repositories"
+	"github.com/rbennum/url-shrtnr/routes"
+	"github.com/rbennum/url-shrtnr/services"
 )
 
 func main() {
@@ -25,24 +28,18 @@ func main() {
 	// initiate DB connection
 	connectDB()
 
-	gin_handler := gin.Default()
-	gin_handler.LoadHTMLGlob("views/*")
-	gin_handler.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(
-			http.StatusOK,
-			"main.html",
-			gin.H {
-				"status": "success",
-			},
-		)
-	})
+	main_handler := configureMainHandler()
+	short_handler := configureShortHandler()
 
 	main_addr := config.GetEnv("ADDR_ROUTE", "localhost")
 	main_port := config.GetEnv("PORT", "8080")
 	short_addr := config.GetEnv("ADDR_ROUTE_SHORTEN", "localhost")
 	short_port := config.GetEnv("PORT_SHORTEN", "8088")
-	main_serv := createServer(main_addr + ":" + main_port, gin_handler)
-	short_serv := createServer(short_addr + ":" + short_port, gin_handler)
+	main_serv := createServer(main_addr + ":" + main_port, main_handler)
+	short_serv := createServer(
+		short_addr + ":" + short_port,
+		short_handler,
+	)
 
 	// initiate shutdown if triggered
 	initiateShutdown(main_serv)
@@ -114,4 +111,22 @@ func migrateDB() {
 		panic(err)
 	}
 	m.Up()
+}
+
+func configureMainHandler() *gin.Engine {
+	r := gin.Default()
+	r.LoadHTMLGlob("views/main/*")
+
+	// init short feature
+	s_repo := repositories.NewShortRepository(&db.Pool_DB)
+	s_service := services.NewShortService(&s_repo)
+	routes.CreateShortRoute(s_service, r)
+
+	return r
+}
+
+func configureShortHandler() *gin.Engine {
+	r := gin.Default()
+	r.LoadHTMLGlob("views/short/*")
+	return r
 }
