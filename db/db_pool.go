@@ -188,3 +188,7 @@ func (p Pool) SecureCheckRole(roleName string) {
         log.Printf("Role %s does not exist.\n", roleName)
     }
 }
+
+func (p Pool) GetInstance() *sqlx.DB {
+	return p.instance
+}
