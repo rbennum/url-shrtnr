@@ -107,7 +107,6 @@ func configureMainHandler() *gin.Engine {
 
 func configureShortHandler() *gin.Engine {
 	r := gin.Default()
-	r.LoadHTMLGlob("views/short/*")
 
 	s_repo := repositories.NewShortRepository(&db.Pool_DB)
 	s_service := services.NewShortService(s_repo)
