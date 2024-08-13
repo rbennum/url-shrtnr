@@ -6,6 +6,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -26,6 +29,7 @@ type PoolOptions struct {
 var Pool_DB Pool
 
 func Init(opts PoolOptions) error {
+	// init DB
 	psqlSetup := fmt.Sprintf(
 		"host=%s port=%d user=%s dbname=%s sslmode=disable",
 		opts.Host, 
@@ -46,6 +50,9 @@ func Init(opts PoolOptions) error {
 	if err != nil {
 		return err
 	}
+	// migrate necessary schemas
+	migrateDB(instance.DB)
+	// generate statements
 	statements := make(map[string]*sqlx.Stmt)
 	for name, query := range queries() {
 		statements[name], err = instance.Preparex(query)
@@ -88,6 +95,33 @@ func queries() map[string]string {
 			VALUES ($1, $2)
 			RETURNING *;
 		`,
+	}
+}
+
+func migrateDB(instance *sql.DB) {
+	driver, err := postgres.WithInstance(
+		instance,
+		&postgres.Config{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://db/migrations",
+		"postgres",
+		driver,
+	)
+	if err != nil {
+		panic(err)
+	}
+	vers, is_dirty, _ := m.Version()
+	log.Printf("Migrating check up: %d, %t", vers, is_dirty)
+	if is_dirty {
+		m.Force(int(vers) - 1)
+	}
+	err = m.Up()
+	if err != nil {
+		panic(err)
 	}
 }
 

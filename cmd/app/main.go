@@ -11,9 +11,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/rbennum/url-shrtnr/config"
 	"github.com/rbennum/url-shrtnr/db"
 	"github.com/rbennum/url-shrtnr/repositories"
@@ -79,7 +76,6 @@ func connectDB() {
 	if errdb != nil {
 		panic(errdb)
 	}
-	migrateDB()
 }
 
 func initiateShutdown(serv *http.Server) {
@@ -94,25 +90,6 @@ func initiateShutdown(serv *http.Server) {
 	}
 	log.Printf("Server %s exiting...", serv.Addr)
 	db.Pool_DB.Close()
-}
-
-func migrateDB() {
-	driver, err := postgres.WithInstance(
-		db.Pool_DB.GetInstance().DB,
-		&postgres.Config{},
-	)
-	if err != nil {
-		panic(err)
-	}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://db/migrations",
-		"postgres",
-		driver,
-	)
-	if err != nil {
-		panic(err)
-	}
-	m.Up()
 }
 
 func configureMainHandler() *gin.Engine {
