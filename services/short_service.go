@@ -24,6 +24,7 @@ func (s *shortService_Impl) GetURLByString(
 	url string,
 ) (*models.Link, error) {
 	rand_str := utils.RandomString(5)
+	log.Printf("Created str: %s", rand_str)
 	url_obj, err := s.Repo.GetURLByString(rand_str, url)
 	log.Printf("Log[GetURLByString] Error: %v", err)
 	return url_obj, err

@@ -19,11 +19,13 @@ import (
 	"github.com/rbennum/url-shrtnr/repositories"
 	"github.com/rbennum/url-shrtnr/routes"
 	"github.com/rbennum/url-shrtnr/services"
+	"github.com/rbennum/url-shrtnr/utils"
 )
 
 func main() {
 	// load config from .env file
 	config.LoadConfig()
+	utils.Init()
 
 	// initiate DB connection
 	connectDB()

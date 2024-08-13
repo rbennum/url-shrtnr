@@ -1,6 +1,14 @@
 package utils
 
-import "golang.org/x/exp/rand"
+import (
+	"time"
+
+	"golang.org/x/exp/rand"
+)
+
+func Init() {
+    rand.Seed(uint64(time.Now().UnixNano()))
+}
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const (
