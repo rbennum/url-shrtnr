@@ -82,7 +82,13 @@ func queries() map[string]string {
 	`,
 	"CountUsers": "SELECT COUNT(*) FROM users;"
 	*/
-	return map[string]string {}
+	return map[string]string {
+		"CreateShortURL": `
+			INSERT INTO link_mappers (url, short_tag)
+			VALUES ($1, $2)
+			RETURNING *;
+		`,
+	}
 }
 
 func (p Pool) GetStatement(name string) *sqlx.Stmt {

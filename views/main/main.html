@@ -1,8 +1,32 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome!</title>
+    <title>Welcome to url-shrtnr!</title>
+    <style>
+        #error-view, #content-view {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <p>Hello, world.</p>
+    <form id="url-form" method="POST" action="/url">
+        <div>
+            <label for="url">URL</label>
+            <br>
+            <input id="url" type="text" name="url" required/>
+        </div>
+        <div>
+            <input type="submit" value="Shorten URL" />
+        </div>
+    </form>
+    <!--Error view-->
+    <div id="error-view">
+        <p id="error-text">Error: something went wrong!</p>
+    </div>
+    <!--Content view-->
+    <div id="content-view">
+        <h1 id="content-text">URL</h1>
+    </div>
+    <script src="/static/main_scripts.js"></script>
 </body>
 </html>

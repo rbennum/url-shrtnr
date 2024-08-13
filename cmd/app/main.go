@@ -116,10 +116,11 @@ func migrateDB() {
 func configureMainHandler() *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("views/main/*")
+	r.Static("/static", "./views/static")
 
 	// init short feature
 	s_repo := repositories.NewShortRepository(&db.Pool_DB)
-	s_service := services.NewShortService(&s_repo)
+	s_service := services.NewShortService(s_repo)
 	routes.CreateShortRoute(s_service, r)
 
 	return r
