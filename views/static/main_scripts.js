@@ -24,7 +24,7 @@ function onFormSubmit() {
             document.getElementById('content-view').style.display = 'block';
             document.getElementById('error-view').style.display = 'none';
             const contentText = document.getElementById('content-text')
-            contentText.textContent = `localhost:8088/${tag}`;
+            contentText.textContent = `${tag}`;
             form.reset();
         })
         .catch(error => {

@@ -95,6 +95,9 @@ func queries() map[string]string {
 			VALUES ($1, $2)
 			RETURNING *;
 		`,
+		"GetStaticURL": `
+			SELECT url FROM static_url;
+		`,
 	}
 }
 
@@ -121,7 +124,9 @@ func migrateDB(instance *sql.DB) {
 	}
 	err = m.Up()
 	if err != nil {
-		panic(err)
+		if err != migrate.ErrNoChange {
+			panic(err)
+		}
 	}
 }
 

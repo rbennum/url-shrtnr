@@ -7,6 +7,7 @@ import (
 
 type ShortRepository interface {
 	GetURLByString(rand_str string, url string) (*models.Link, error)
+	GetStaticURL() (*string, error)
 }
 
 type ShortRepository_Impl struct {
@@ -31,4 +32,14 @@ func (s ShortRepository_Impl) GetURLByString(
 		return nil, err
 	}
 	return &url_obj, nil
+}
+
+func (s ShortRepository_Impl) GetStaticURL() (*string, error) {
+	stmt := s.Pool.GetStatement("GetStaticURL")
+	var saved_url *string
+	err := stmt.Get(&saved_url)
+	if err != nil {
+		return nil, err
+	}
+	return saved_url, nil
 }
