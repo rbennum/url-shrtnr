@@ -98,6 +98,11 @@ func queries() map[string]string {
 		"GetStaticURL": `
 			SELECT url FROM static_url;
 		`,
+		"GetURL": `
+			SELECT url
+			FROM link_mappers
+			WHERE short_tag = $1;
+		`,
 	}
 }
 

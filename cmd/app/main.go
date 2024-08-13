@@ -100,7 +100,7 @@ func configureMainHandler() *gin.Engine {
 	// init short feature
 	s_repo := repositories.NewShortRepository(&db.Pool_DB)
 	s_service := services.NewShortService(s_repo)
-	routes.CreateShortRoute(s_service, r)
+	routes.CreateMainRoute(s_service, r)
 
 	return r
 }
@@ -108,5 +108,9 @@ func configureMainHandler() *gin.Engine {
 func configureShortHandler() *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("views/short/*")
+
+	s_repo := repositories.NewShortRepository(&db.Pool_DB)
+	s_service := services.NewShortService(s_repo)
+	routes.CreateShortRoute(s_service, r)
 	return r
 }
