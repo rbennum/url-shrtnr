@@ -1,2 +1,4 @@
 # Never include files related to the env
 .env
+
+**/__debug*
