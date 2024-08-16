@@ -2,16 +2,15 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rbennum/url-shrtnr/config"
 	"github.com/rbennum/url-shrtnr/db"
 	"github.com/rbennum/url-shrtnr/repositories"
 	"github.com/rbennum/url-shrtnr/routes"
@@ -20,23 +19,32 @@ import (
 )
 
 func main() {
-	// load config from .env file
-	config.LoadConfig()
 	utils.Init()
 
+	// initiate logger
+	err := utils.InitLogger()
+	if err != nil {
+		log.Fatal("Unable to init logger:", err)
+	}
+
+	// load config from .env file
+	config, err := utils.LoadConfig()
+	if err != nil {
+		log.Fatal("Unable to init config:", err)
+	}
+
 	// initiate DB connection
-	connectDB()
+	connectDB(&config)
 
 	main_handler := configureMainHandler()
 	short_handler := configureShortHandler()
 
-	main_addr := config.GetEnv("ADDR_ROUTE", "localhost")
-	main_port := config.GetEnv("PORT", "8080")
-	short_addr := config.GetEnv("ADDR_ROUTE_SHORTEN", "localhost")
-	short_port := config.GetEnv("PORT_SHORTEN", "8088")
-	main_serv := createServer(main_addr + ":" + main_port, main_handler)
+	main_serv := createServer(
+		fmt.Sprintf("%s:%s", config.MainServerAddr, config.MainServerPort),
+		main_handler,
+	)
 	short_serv := createServer(
-		short_addr + ":" + short_port,
+		fmt.Sprintf("%s:%s", config.ShortServerAddr, config.ShortServerPort),
 		short_handler,
 	)
 
@@ -47,41 +55,29 @@ func main() {
 
 func createServer(addr string, handler *gin.Engine) *http.Server {
 	serv := &http.Server{
-		Addr: addr,
+		Addr:    addr,
 		Handler: handler,
 	}
 	go func() {
 		log.Printf("Listening to %s...", addr)
-		if err := serv.ListenAndServe(); 
-				err != nil && err != http.ErrServerClosed {
-				log.Fatalf("Listen: %s\n", err)
+		if err := serv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Listen: %s\n", err)
 		}
 	}()
 	return serv
 }
 
-func connectDB() {
-	port, errconv := strconv.Atoi(config.GetEnv("DB_PORT", "")) 
-	if errconv != nil {
-		panic(errconv)
-	}
-	opts := db.PoolOptions {
-		Host: config.GetEnv("DB_HOST", ""),
-		Port: port,
-		User: config.GetEnv("DB_USER", ""),
-		DBName: config.GetEnv("DB_NAME", ""),
-		Pass: config.GetEnv("DB_PASS", ""),
-	}
-	errdb := db.Init(opts)
+func connectDB(config *utils.CommonConfig) {
+	errdb := db.Init(config)
 	if errdb != nil {
-		panic(errdb)
+		log.Fatal("Unable to init DB:", errdb)
 	}
 }
 
 func initiateShutdown(serv *http.Server) {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<- quit
+	<-quit
 	log.Println("Shutting down...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
