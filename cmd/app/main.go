@@ -36,13 +36,13 @@ func main() {
 	// initiate DB connection
 	connectDB(&config)
 
+	// initiate both servers
 	main_handler := configureMainHandler()
-	short_handler := configureShortHandler()
-
 	main_serv := createServer(
 		fmt.Sprintf("%s:%s", config.MainServerAddr, config.MainServerPort),
 		main_handler,
 	)
+	short_handler := configureShortHandler()
 	short_serv := createServer(
 		fmt.Sprintf("%s:%s", config.ShortServerAddr, config.ShortServerPort),
 		short_handler,
