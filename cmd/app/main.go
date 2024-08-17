@@ -61,7 +61,7 @@ func createServer(addr string, handler *gin.Engine) *http.Server {
 	go func() {
 		log.Printf("Listening to %s...", addr)
 		if err := serv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Listen: %s\n", err)
+			log.Fatalf("Error listening to server: %s\n", err)
 		}
 	}()
 	return serv
@@ -94,9 +94,10 @@ func configureMainHandler() *gin.Engine {
 	r.Static("/static", "./views/static")
 
 	// init short feature
-	s_repo := repositories.NewShortRepository(&db.Pool_DB)
-	s_service := services.NewShortService(s_repo)
-	routes.CreateMainRoute(s_service, r)
+	repo := repositories.NewShortRepository(db.Pool_DB)
+	service := services.NewShortService(repo)
+	mainRouter := routes.NewMainRoute(&service)
+	routes.CreateMainRoute(mainRouter, r)
 
 	return r
 }
@@ -104,8 +105,9 @@ func configureMainHandler() *gin.Engine {
 func configureShortHandler() *gin.Engine {
 	r := gin.Default()
 
-	s_repo := repositories.NewShortRepository(&db.Pool_DB)
-	s_service := services.NewShortService(s_repo)
-	routes.CreateShortRoute(s_service, r)
+	repo := repositories.NewShortRepository(db.Pool_DB)
+	service := services.NewShortService(repo)
+	shortRouter := routes.NewShortRouter(&service)
+	routes.CreateShortRoute(shortRouter, r)
 	return r
 }

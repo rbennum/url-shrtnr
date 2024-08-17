@@ -17,7 +17,7 @@ type Pool struct {
 	statements map[string]*sqlx.Stmt
 }
 
-var Pool_DB Pool
+var Pool_DB *Pool
 
 func Init(config *utils.CommonConfig) error {
 	// init DB
@@ -42,7 +42,7 @@ func Init(config *utils.CommonConfig) error {
 			return err
 		}
 	}
-	Pool_DB = Pool{
+	Pool_DB = &Pool{
 		instance:   instance,
 		statements: statements,
 	}
