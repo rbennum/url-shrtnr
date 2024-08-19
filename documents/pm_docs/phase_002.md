@@ -1,4 +1,4 @@
-# Phase 1 – Air and Authentication Features
+# Phase 2 – Air and Authentication Features
 
 ## Feature Overview
 
