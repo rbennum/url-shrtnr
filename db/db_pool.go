@@ -33,7 +33,7 @@ func Init(config *utils.CommonConfig) error {
 		return err
 	}
 	// migrate necessary schemas
-	migrateDB(instance.DB)
+	migrateDB(instance.DB, config.DBName)
 	// generate statements
 	statements := make(map[string]*sqlx.Stmt)
 	for name, query := range queries() {
@@ -88,7 +88,7 @@ func queries() map[string]string {
 	}
 }
 
-func migrateDB(instance *sql.DB) {
+func migrateDB(instance *sql.DB, dbName string) {
 	driver, err := postgres.WithInstance(
 		instance,
 		&postgres.Config{},
@@ -98,7 +98,7 @@ func migrateDB(instance *sql.DB) {
 	}
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://db/migrations",
-		"postgres",
+		dbName,
 		driver,
 	)
 	if err != nil {
