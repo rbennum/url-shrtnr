@@ -39,6 +39,7 @@ func (r *MainRoute) OpenMainPage(ctx *gin.Context) {
 func (r *MainRoute) CreateShortURL(ctx *gin.Context) {
 	var req models.LinkRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
+		log.Println("Error binding JSON:", err)
 		ctx.JSON(
 			http.StatusBadRequest,
 			gin.H{"error": err.Error()},
@@ -48,6 +49,7 @@ func (r *MainRoute) CreateShortURL(ctx *gin.Context) {
 	log.Printf("[Body] %s: %v", ctx.Request.URL.String(), req)
 	url_obj, err := r.service.CreateURL(req.URL)
 	if err != nil {
+		log.Println("Error service:", err)
 		ctx.JSON(
 			http.StatusBadRequest,
 			gin.H{"error": err.Error()},

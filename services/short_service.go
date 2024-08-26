@@ -19,7 +19,7 @@ type shortService_Impl struct {
 }
 
 func NewShortService(repo repositories.ShortRepository) ShortService {
-	return &shortService_Impl { Repo: repo }
+	return &shortService_Impl{Repo: repo}
 }
 
 func (s *shortService_Impl) CreateURL(
