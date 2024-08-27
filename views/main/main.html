@@ -1,32 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome to url-shrtnr!</title>
-    <style>
-        #error-view, #content-view {
-            display: none;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>url shrtnr</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-    <form id="url-form" method="POST" action="/url">
-        <div>
-            <label for="url">URL</label>
-            <br>
-            <input id="url" type="text" name="url" required/>
+    <header>
+        <h1>url shrtnr</h1>
+    </header>
+    <main>
+        <form id="urlForm" onsubmit="onSubmit(event);">
+            <input type="text" id="urlInput" placeholder="Enter your URL here" required>
+            <p id="errorMessage" class="hidden">URL must be 400 characters or less.</p>
+            <button type="submit">Shorten URL</button>
+        </form>
+        <div id="result" class="hidden">
+            <p id="successMessage" class="hidden"></p>
+            <p id="errorView" class="hidden"></p>
         </div>
-        <div>
-            <input type="submit" value="Shorten URL" />
-        </div>
-    </form>
-    <!--Error view-->
-    <div id="error-view">
-        <p id="error-text">Error: something went wrong!</p>
-    </div>
-    <!--Content view-->
-    <div id="content-view">
-        <h1 id="content-text">URL</h1>
-    </div>
+    </main>
+    <footer>
+        <p>© 2024 rbennum. All rights reserved.</p>
+    </footer>
     <script src="/static/main_scripts.js"></script>
 </body>
 </html>
