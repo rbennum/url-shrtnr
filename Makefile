@@ -22,6 +22,7 @@ endif
 build-main: clean
 	@echo "Building $(BINARY_NAME_MAIN)..."
 	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_MAIN) ./$(SRC_MAIN)
+	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_MAIN)
 
 # Run the main binary
 run-main: build-main
@@ -32,6 +33,7 @@ run-main: build-main
 build-redirector: clean
 	@echo "Building $(BINARY_NAME_REDIRECTOR)..."
 	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR) ./$(SRC_REDIRECTOR)
+	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
 
 # Run the main binary
 run-redirector: build-redirector

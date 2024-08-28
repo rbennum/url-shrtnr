@@ -36,15 +36,15 @@ func main() {
 	// initiate DB connection
 	connectDB(&config)
 
-	// initiate both servers
-	main_handler := configureMainHandler()
-	main_serv := createServer(
-		fmt.Sprintf("%s:%s", config.MainServerAddr, config.MainServerPort),
-		main_handler,
+	// initiate the redirector server
+	redirector_handler := configureRedirectorHandler()
+	short_serv := createServer(
+		fmt.Sprintf("%s:%s", config.ShortServerAddr, config.ShortServerPort),
+		redirector_handler,
 	)
 
 	// initiate shutdown if triggered
-	initiateShutdown(main_serv)
+	initiateShutdown(short_serv)
 }
 
 func createServer(addr string, handler *gin.Engine) *http.Server {
@@ -82,16 +82,12 @@ func initiateShutdown(serv *http.Server) {
 	db.Pool_DB.Close()
 }
 
-func configureMainHandler() *gin.Engine {
+func configureRedirectorHandler() *gin.Engine {
 	r := gin.Default()
-	r.LoadHTMLGlob("views/main/*")
-	r.Static("/static", "./views/static")
 
-	// init short feature
 	repo := repositories.NewShortRepository(db.Pool_DB)
 	service := services.NewShortService(repo)
-	mainRouter := routes.NewMainRoute(&service)
-	routes.CreateMainRoute(mainRouter, r)
-
+	shortRouter := routes.NewShortRouter(&service)
+	routes.CreateShortRoute(shortRouter, r)
 	return r
 }
