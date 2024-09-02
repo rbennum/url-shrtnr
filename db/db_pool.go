@@ -94,6 +94,7 @@ func migrateDB(instance *sql.DB, dbName string) {
 		&postgres.Config{},
 	)
 	if err != nil {
+		log.Fatalf("Error: %v", err)
 		panic(err)
 	}
 	m, err := migrate.NewWithDatabaseInstance(
@@ -102,6 +103,7 @@ func migrateDB(instance *sql.DB, dbName string) {
 		driver,
 	)
 	if err != nil {
+		log.Fatalf("Error: %v", err)
 		panic(err)
 	}
 	vers, is_dirty, _ := m.Version()

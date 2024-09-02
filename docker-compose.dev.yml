@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16.4-alpine3.19
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+    secrets:
+      - DEV_POSTGRES_NAME
+      - DEV_POSTGRES_USER
+      - DEV_POSTGRES_PASS
+    environment:
+      POSTGRES_DB_FILE: /run/secrets/DEV_POSTGRES_NAME
+      POSTGRES_USER_FILE: /run/secrets/DEV_POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/DEV_POSTGRES_PASS
+    ports:
+      - 5432:5432
+    networks:
+      - shortener_net
+
+  main-app:
+    image: shrtnr_main:latest
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=dev
+    ports:
+      - 8081:8081
+    networks:
+      - shortener_net
+    command: ["/app/main"]
+
+  redir-app:
+    image: shrtnr_redir:latest
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=dev
+    ports:
+      - 8088:8088
+    networks:
+      - shortener_net
+    command: ["/app/red"]
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  shortener_net:
+    driver: overlay
+
+secrets:
+  shrtnr_dev.env:
+    external: true
+  DEV_POSTGRES_PASS:
+    external: true
+  DEV_POSTGRES_USER:
+    external: true
+  DEV_POSTGRES_NAME:
+    external: true

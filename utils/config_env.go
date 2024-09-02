@@ -34,8 +34,17 @@ func GetEnv(key string, fallback ...string) string {
 }
 
 // Initialize common configurations from a .env file
-func LoadConfig(loc ...string) (config CommonConfig, err error) {
-	err = godotenv.Load(loc...)
+func LoadConfig() (config CommonConfig, err error) {
+	appEnv := os.Getenv("APP_ENV")
+	if appEnv == "" {
+		err = fmt.Errorf("expected the env to be set")
+		return
+	}
+	if appEnv == "dev" {
+		err = godotenv.Load("dev.env")
+	} else {
+		err = godotenv.Load("prod.env")
+	}
 	if err != nil {
 		return
 	}
@@ -51,12 +60,12 @@ func LoadConfig(loc ...string) (config CommonConfig, err error) {
 func (conf *CommonConfig) MakeDBConfiguration() {
 	dbSetup := fmt.Sprintf(
 		"host=%s port=%s user=%s dbname=%s sslmode=disable",
-		GetEnv("DB_HOST"),
-		GetEnv("DB_PORT"),
-		GetEnv("DB_USER"),
-		GetEnv("DB_NAME"),
+		GetEnv("POSTGRES_HOST"),
+		GetEnv("POSTGRES_PORT"),
+		GetEnv("POSTGRES_USER"),
+		GetEnv("POSTGRES_NAME"),
 	)
-	if pass := GetEnv("DB_PASS"); pass != "" {
+	if pass := GetEnv("POSTGRES_PASS"); pass != "" {
 		dbSetup = fmt.Sprintf("%s password=%s", dbSetup, pass)
 	}
 	conf.DBSourceName = dbSetup

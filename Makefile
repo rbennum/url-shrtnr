@@ -40,6 +40,12 @@ run-redirector: build-redirector
 	@echo "Running $(BINARY_NAME_REDIRECTOR)..."
 	@./$(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
 
+# Build the image for the main binary
+deploy-docker-dev:
+	@docker build -f Dockerfile.main -t shrtnr_main .
+	@docker build -f Dockerfile.redirector -t shrtnr_redir .
+	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
+
 # Start debugging using Delve
 debug-main: build-main
 	@echo "Start debugging $(BINARY_NAME_MAIN)"
