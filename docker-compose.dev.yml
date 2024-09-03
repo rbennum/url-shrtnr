@@ -20,7 +20,7 @@ services:
       - shortener_net
 
   main-app:
-    image: shrtnr_main:latest
+    image: shrtnr_main:${IMAGE_TAG}
     depends_on:
       - db
     environment:
@@ -32,7 +32,7 @@ services:
     command: ["/app/main"]
 
   redir-app:
-    image: shrtnr_redir:latest
+    image: shrtnr_redir:${IMAGE_TAG}
     depends_on:
       - db
     environment:

@@ -47,6 +47,8 @@ func main() {
 
 func configureRedirectorHandler() *gin.Engine {
 	r := gin.Default()
+	r.LoadHTMLGlob("views/main/*")
+	r.Static("/static", "./views/static")
 
 	repo := repositories.NewShortRepository(db.Pool_DB)
 	service := services.NewShortService(repo)

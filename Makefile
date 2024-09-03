@@ -40,10 +40,24 @@ run-redirector: build-redirector
 	@echo "Running $(BINARY_NAME_REDIRECTOR)..."
 	@./$(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
 
+save-version:
+	@echo $(TIMESTAMP) > $(VERSION_FILE)
+
+apply-image-tag:
+	@if [ -z "$(IMAGE_TAG)" ]; then \
+		echo "ERROR: IMAGE_TAG is not set."; \
+		exit 1; \
+	fi
+
+build-docker-main: apply-image-tag
+	@docker build -f Dockerfile.main -t shrtnr_main:$(IMAGE_TAG) .
+
+build-docker-redir: apply-image-tag
+	@docker build -f Dockerfile.redirector -t shrtnr_redir:$(IMAGE_TAG) .
+
 # Build the image for the main binary
-deploy-docker-dev:
-	@docker build -f Dockerfile.main -t shrtnr_main .
-	@docker build -f Dockerfile.redirector -t shrtnr_redir .
+deploy-docker-dev: build-docker-main build-docker-redir
+	@$(shell export IMAGE_TAG=$(IMAGE_TAG))
 	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
 
 # Start debugging using Delve

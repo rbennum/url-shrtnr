@@ -12,5 +12,3 @@ COPY --from=builder_main /build_main/main .
 COPY db/migrations db/migrations
 COPY dev.env dev.env
 COPY views views
-
-CMD [ "/app/main" ]

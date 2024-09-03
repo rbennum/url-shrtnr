@@ -12,5 +12,3 @@ COPY --from=builder_red /build_red/red .
 COPY db/migrations db/migrations
 COPY dev.env dev.env
 COPY views views
-
-CMD [ "/app/red" ]
