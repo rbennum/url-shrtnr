@@ -15,7 +15,7 @@ services:
       POSTGRES_USER_FILE: /run/secrets/DEV_POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/DEV_POSTGRES_PASS
     ports:
-      - 5432:5432
+      - ${PORT_DB}:${PORT_DB}
     networks:
       - shortener_net
 
@@ -26,7 +26,7 @@ services:
     environment:
       - APP_ENV=dev
     ports:
-      - 8081:8081
+      - ${PORT_MAIN}:${PORT_MAIN}
     networks:
       - shortener_net
     command: ["/app/main"]
@@ -38,7 +38,7 @@ services:
     environment:
       - APP_ENV=dev
     ports:
-      - 8088:8088
+      - ${PORT_REDIR}:${PORT_REDIR}
     networks:
       - shortener_net
     command: ["/app/red"]

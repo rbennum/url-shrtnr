@@ -19,7 +19,7 @@ endif
 # .PHONY: all build clean run test
 
 # Build the main binary
-build-main: clean
+build-main:
 	@echo "Building $(BINARY_NAME_MAIN)..."
 	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_MAIN) ./$(SRC_MAIN)
 	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_MAIN)
@@ -30,7 +30,7 @@ run-main: build-main
 	@./$(BUILD_DIR)/$(BINARY_NAME_MAIN)
 
 # Build the redirector binary
-build-redirector: clean
+build-redirector:
 	@echo "Building $(BINARY_NAME_REDIRECTOR)..."
 	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR) ./$(SRC_REDIRECTOR)
 	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
@@ -40,22 +40,32 @@ run-redirector: build-redirector
 	@echo "Running $(BINARY_NAME_REDIRECTOR)..."
 	@./$(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
 
-save-version:
-	@echo $(TIMESTAMP) > $(VERSION_FILE)
+run-all: run-main run-redirector
 
-apply-image-tag:
+apply-env:
 	@if [ -z "$(IMAGE_TAG)" ]; then \
 		echo "ERROR: IMAGE_TAG is not set."; \
 		exit 1; \
 	fi
+	@if [ -z "$(PORT_DB)" ]; then \
+		echo "ERROR: PORT_DB is not set."; \
+		exit 1; \
+	fi
+	@if [ -z "$(PORT_REDIR)" ]; then \
+		echo "ERROR: PORT_REDIR is not set."; \
+		exit 1; \
+	fi
+	@if [ -z "$(PORT_MAIN)" ]; then \
+		echo "ERROR: PORT_MAIN is not set."; \
+		exit 1; \
+	fi
 
-build-docker-main: apply-image-tag
+build-docker-main: apply-env
 	@docker build -f Dockerfile.main -t shrtnr_main:$(IMAGE_TAG) .
 
-build-docker-redir: apply-image-tag
+build-docker-redir: apply-env
 	@docker build -f Dockerfile.redirector -t shrtnr_redir:$(IMAGE_TAG) .
 
-# Build the image for the main binary
 deploy-docker-dev: build-docker-main build-docker-redir
 	@$(shell export IMAGE_TAG=$(IMAGE_TAG))
 	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
