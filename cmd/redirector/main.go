@@ -23,10 +23,7 @@ func main() {
 	}
 
 	// load config from .env file
-	config, err := utils.LoadConfig()
-	if err != nil {
-		log.Fatal("Unable to init config:", err)
-	}
+	config := utils.LoadConfig()
 
 	// initiate DB connection
 	err = db.Init(&config)
@@ -35,7 +32,7 @@ func main() {
 	}
 
 	// initiate the redirector server
-	redirector_handler := configureRedirectorHandler()
+	redirector_handler := configureRedirectorHandler(config)
 	short_serv := servers.CreateServer(
 		fmt.Sprintf("%s:%s", config.ShortServerAddr, config.ShortServerPort),
 		redirector_handler,
@@ -45,13 +42,13 @@ func main() {
 	servers.InitiateShutdown(short_serv)
 }
 
-func configureRedirectorHandler() *gin.Engine {
+func configureRedirectorHandler(config utils.CommonConfig) *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("views/main/*")
 	r.Static("/static", "./views/static")
 
 	repo := repositories.NewShortRepository(db.Pool_DB)
-	service := services.NewShortService(repo)
+	service := services.NewShortService(repo, config)
 	shortRouter := routes.NewShortRouter(&service)
 	routes.CreateShortRoute(shortRouter, r)
 	return r

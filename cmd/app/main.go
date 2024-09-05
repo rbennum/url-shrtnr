@@ -23,10 +23,7 @@ func main() {
 	}
 
 	// load config from .env file
-	config, err := utils.LoadConfig()
-	if err != nil {
-		log.Fatal("Unable to init config:", err)
-	}
+	config := utils.LoadConfig()
 
 	// initiate DB connection
 	err = db.Init(&config)
@@ -35,7 +32,7 @@ func main() {
 	}
 
 	// initiate both servers
-	main_handler := configureMainHandler()
+	main_handler := configureMainHandler(config)
 	main_serv := servers.CreateServer(
 		fmt.Sprintf("%s:%s", config.MainServerAddr, config.MainServerPort),
 		main_handler,
@@ -45,14 +42,14 @@ func main() {
 	servers.InitiateShutdown(main_serv)
 }
 
-func configureMainHandler() *gin.Engine {
+func configureMainHandler(config utils.CommonConfig) *gin.Engine {
 	r := gin.Default()
 	r.LoadHTMLGlob("views/main/*")
 	r.Static("/static", "./views/static")
 
 	// init short feature
 	repo := repositories.NewShortRepository(db.Pool_DB)
-	service := services.NewShortService(repo)
+	service := services.NewShortService(repo, config)
 	mainRouter := routes.NewMainRoute(&service)
 	routes.CreateMainRoute(mainRouter, r)
 

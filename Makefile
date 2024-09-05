@@ -13,35 +13,38 @@ ENV=dev
 GO_FLAGS=
 ifeq ($(ENV),prod)
 	GO_FLAGS += -ldflags="-s -w"
+else
+	GO_FLAGS += -gcflags="all=-N -l"
+endif
+
+# Flags for the dlv command
+DLV_FLAGS=--log
+
+# Include env vars in local.env
+ifneq (,$(wildcard local.env))
+    include local.env
+    export $(shell sed 's/=.*//' local.env)
 endif
 
 # Tasks
 # .PHONY: all build clean run test
 
-# Build the main binary
-build-main:
-	@echo "Building $(BINARY_NAME_MAIN)..."
-	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_MAIN) ./$(SRC_MAIN)
-	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_MAIN)
-
+###
+### LOCALLY RUN THE PROJECT
+###
 # Run the main binary
-run-main: build-main
+run-main:
 	@echo "Running $(BINARY_NAME_MAIN)..."
-	@./$(BUILD_DIR)/$(BINARY_NAME_MAIN)
-
-# Build the redirector binary
-build-redirector:
-	@echo "Building $(BINARY_NAME_REDIRECTOR)..."
-	@go build $(GO_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR) ./$(SRC_REDIRECTOR)
-	@chmod 755 $(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
+	@dlv debug $(SRC_MAIN) $(DLV_FLAGS)
 
 # Run the main binary
-run-redirector: build-redirector
+run-redirector:
 	@echo "Running $(BINARY_NAME_REDIRECTOR)..."
-	@./$(BUILD_DIR)/$(BINARY_NAME_REDIRECTOR)
+	@dlv debug $(SRC_REDIRECTOR) $(DLV_FLAGS)
 
-run-all: run-main run-redirector
-
+###
+### RUN DOCKER WITH DEV ENV
+###
 apply-env:
 	@if [ -z "$(IMAGE_TAG)" ]; then \
 		echo "ERROR: IMAGE_TAG is not set."; \
@@ -70,10 +73,13 @@ deploy-docker-dev: build-docker-main build-docker-redir
 	@$(shell export IMAGE_TAG=$(IMAGE_TAG))
 	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
 
-# Start debugging using Delve
-debug-main: build-main
-	@echo "Start debugging $(BINARY_NAME_MAIN)"
-	@dlv exec ./$(BUILD_DIR)/$(BINARY_NAME_MAIN)
+###
+### RUN DOCKER WITH PROD ENV
+###
+
+###
+### MISC
+###
 
 # Clean up build artifacts
 clean:

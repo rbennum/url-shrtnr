@@ -77,9 +77,6 @@ func queries() map[string]string {
 			VALUES ($1, $2)
 			RETURNING *;
 		`,
-		"GetStaticURL": `
-			SELECT url FROM static_url;
-		`,
 		"GetURL": `
 			SELECT url
 			FROM link_mappers
