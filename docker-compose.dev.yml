@@ -7,15 +7,17 @@ services:
       - db-data:/var/lib/postgresql/data
     restart: always
     secrets:
-      - DEV_POSTGRES_NAME
-      - DEV_POSTGRES_USER
-      - DEV_POSTGRES_PASS
+      - POSTGRES_NAME
+      - POSTGRES_USER
+      - POSTGRES_PASS
     environment:
-      POSTGRES_DB_FILE: /run/secrets/DEV_POSTGRES_NAME
-      POSTGRES_USER_FILE: /run/secrets/DEV_POSTGRES_USER
-      POSTGRES_PASSWORD_FILE: /run/secrets/DEV_POSTGRES_PASS
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_NAME
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASS
+    env_file:
+      - dev.env
     ports:
-      - ${PORT_DB}:${PORT_DB}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     networks:
       - shortener_net
 
@@ -23,10 +25,14 @@ services:
     image: shrtnr_main:${IMAGE_TAG}
     depends_on:
       - db
-    environment:
-      - APP_ENV=dev
+    env_file:
+      - dev.env
+    secrets:
+      - POSTGRES_NAME
+      - POSTGRES_USER
+      - POSTGRES_PASS
     ports:
-      - ${PORT_MAIN}:${PORT_MAIN}
+      - ${PORT}:${PORT}
     networks:
       - shortener_net
     command: ["/app/main"]
@@ -35,10 +41,14 @@ services:
     image: shrtnr_redir:${IMAGE_TAG}
     depends_on:
       - db
-    environment:
-      - APP_ENV=dev
+    env_file:
+      - dev.env
+    secrets:
+      - POSTGRES_NAME
+      - POSTGRES_USER
+      - POSTGRES_PASS
     ports:
-      - ${PORT_REDIR}:${PORT_REDIR}
+      - ${PORT_SHORTEN}:${PORT_SHORTEN}
     networks:
       - shortener_net
     command: ["/app/red"]
@@ -52,11 +62,9 @@ networks:
     driver: overlay
 
 secrets:
-  shrtnr_dev.env:
+  POSTGRES_PASS:
     external: true
-  DEV_POSTGRES_PASS:
+  POSTGRES_USER:
     external: true
-  DEV_POSTGRES_USER:
-    external: true
-  DEV_POSTGRES_NAME:
+  POSTGRES_NAME:
     external: true

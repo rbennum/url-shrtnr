@@ -44,10 +44,10 @@ func (conf *CommonConfig) MakeDBConfiguration() {
 		"host=%s port=%s user=%s dbname=%s sslmode=disable",
 		getEnv("POSTGRES_HOST", ""),
 		getEnv("POSTGRES_PORT", ""),
-		getEnv("POSTGRES_USER", "/run/secrets/DEV_POSTGRES_USER"),
-		getEnv("POSTGRES_NAME", "/run/secrets/DEV_POSTGRES_NAME"),
+		getEnv("POSTGRES_USER", "/run/secrets/POSTGRES_USER"),
+		getEnv("POSTGRES_NAME", "/run/secrets/POSTGRES_NAME"),
 	)
-	if pass := getEnv("POSTGRES_PASS", "/run/secrets/DEV_POSTGRES_PASS"); pass != "" {
+	if pass := getEnv("POSTGRES_PASS", "/run/secrets/POSTGRES_PASS"); pass != "" {
 		dbSetup = fmt.Sprintf("%s password=%s", dbSetup, pass)
 	}
 	conf.DBSourceName = dbSetup

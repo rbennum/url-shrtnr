@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/rbennum/url-shrtnr/models"
 	"github.com/rbennum/url-shrtnr/repositories"
@@ -35,11 +36,16 @@ func (s *shortService_Impl) CreateURL(
 	if err != nil {
 		return nil, err
 	}
-	static_url := fmt.Sprintf(
-		"%s:%s",
-		s.Config.ShortServerAddr,
-		s.Config.ShortServerPort,
-	)
+	static_url := ""
+	if os.Getenv("GIN_MODE") == "RELEASE" {
+		static_url = fmt.Sprintf("%s", s.Config.ShortServerAddr)
+	} else {
+		static_url = fmt.Sprintf(
+			"%s:%s",
+			s.Config.ShortServerAddr,
+			s.Config.ShortServerPort,
+		)
+	}
 	url_obj.Tag = fmt.Sprintf("%s/%s", static_url, url_obj.Tag)
 	log.Printf("Log[GetURLByString] Error: %v", err)
 	return url_obj, err

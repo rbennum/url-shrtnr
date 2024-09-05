@@ -50,18 +50,6 @@ apply-env:
 		echo "ERROR: IMAGE_TAG is not set."; \
 		exit 1; \
 	fi
-	@if [ -z "$(PORT_DB)" ]; then \
-		echo "ERROR: PORT_DB is not set."; \
-		exit 1; \
-	fi
-	@if [ -z "$(PORT_REDIR)" ]; then \
-		echo "ERROR: PORT_REDIR is not set."; \
-		exit 1; \
-	fi
-	@if [ -z "$(PORT_MAIN)" ]; then \
-		echo "ERROR: PORT_MAIN is not set."; \
-		exit 1; \
-	fi
 
 build-docker-main: apply-env
 	@docker build -f Dockerfile.main -t shrtnr_main:$(IMAGE_TAG) .
@@ -72,6 +60,9 @@ build-docker-redir: apply-env
 deploy-docker-dev: build-docker-main build-docker-redir
 	@$(shell export IMAGE_TAG=$(IMAGE_TAG))
 	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
+
+stop-docker-dev:
+	@docker service rm url-shrtnr_db url-shrtnr_main-app url-shrtnr_redir-app
 
 ###
 ### RUN DOCKER WITH PROD ENV
@@ -111,10 +102,3 @@ fmt:
 lint: vet fmt
 	@echo "Running linter..."
 	@golangci-lint run
-
-# Run in different environments
-# dev: ENV=dev
-# dev: run
-
-# prod: ENV=prod
-# prod: run
