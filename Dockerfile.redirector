@@ -1,0 +1,14 @@
+# Build stage
+FROM golang:1.22-alpine3.19 AS builder_red
+WORKDIR /build_red
+COPY . .
+RUN go mod tidy
+RUN go build -o red cmd/redirector/main.go
+
+# Run stage
+FROM alpine:3.19
+WORKDIR /app
+COPY --from=builder_red /build_red/red .
+COPY db/migrations db/migrations
+COPY dev.env dev.env
+COPY views views

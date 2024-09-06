@@ -1,5 +1,7 @@
 # Never include files related to the env
-.env
+*.env
 **/__debug*
 **/log/
 go.sum
+/build
+*.txt

@@ -1,0 +1,14 @@
+# Build stage
+FROM golang:1.22-alpine3.19 AS builder_main
+WORKDIR /build_main
+COPY . .
+RUN go mod tidy
+RUN go build -o main cmd/app/main.go
+
+# Run stage
+FROM alpine:3.19
+WORKDIR /app
+COPY --from=builder_main /build_main/main .
+COPY db/migrations db/migrations
+COPY dev.env dev.env
+COPY views views

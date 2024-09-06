@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -26,7 +27,14 @@ func (r *ShortRouter) RedirectURL(ctx *gin.Context) {
 	tag := ctx.Param("tag")
 	url, err := r.service.GetURL(tag)
 	if err != nil {
-		ctx.String(http.StatusNotFound, "URL not found")
+		log.Printf("[Tag %s] not found", tag)
+		ctx.HTML(
+			http.StatusNotFound,
+			"not-found.html",
+			gin.H{
+				"status": "not found",
+			},
+		)
 		return
 	}
 	if !strings.HasPrefix(*url, "https://") && !strings.HasPrefix(*url, "http://") {
