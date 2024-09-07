@@ -10,5 +10,5 @@ FROM alpine:3.19
 WORKDIR /app
 COPY --from=builder_red /build_red/red .
 COPY db/migrations db/migrations
-COPY dev.env dev.env
+COPY prod.env prod.env
 COPY views views

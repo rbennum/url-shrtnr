@@ -37,12 +37,12 @@ func (s *shortService_Impl) CreateURL(
 		return nil, err
 	}
 	static_url := ""
-	if os.Getenv("GIN_MODE") == "RELEASE" {
-		static_url = fmt.Sprintf("%s", s.Config.ShortServerAddr)
+	if os.Getenv("GIN_MODE") == "release" {
+		static_url = s.Config.StaticURL
 	} else {
 		static_url = fmt.Sprintf(
 			"%s:%s",
-			s.Config.ShortServerAddr,
+			s.Config.StaticURL,
 			s.Config.ShortServerPort,
 		)
 	}

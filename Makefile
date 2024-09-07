@@ -45,12 +45,6 @@ run-redirector:
 ###
 ### RUN DOCKER WITH DEV ENV
 ###
-apply-env:
-	@if [ -z "$(IMAGE_TAG)" ]; then \
-		echo "ERROR: IMAGE_TAG is not set."; \
-		exit 1; \
-	fi
-
 build-docker-main: apply-env
 	@docker build -f Dockerfile.main -t shrtnr_main:$(IMAGE_TAG) .
 
@@ -62,15 +56,32 @@ deploy-docker-dev: build-docker-main build-docker-redir
 	@docker stack deploy -c docker-compose.dev.yml url-shrtnr -d
 
 stop-docker-dev:
-	@docker service rm url-shrtnr_db url-shrtnr_main-app url-shrtnr_redir-app
+	@docker service rm url-shrtnr_shortener-db \
+	url-shrtnr_shortener-main-app url-shrtnr_shortener-redir-app
 
 ###
 ### RUN DOCKER WITH PROD ENV
 ###
+build-docker-prod: clean apply-env
+	@docker build -f Dockerfile.prod.main -t rbennum2329/shrtnr_main:$(IMAGE_TAG) \
+	--progress=plain .
+	@docker push rbennum2329/shrtnr_main:$(IMAGE_TAG)
+	@docker build -f Dockerfile.prod.redirector -t rbennum2329/shrtnr_redir:$(IMAGE_TAG) \
+	--progress=plain .
+	@docker push rbennum2329/shrtnr_redir:$(IMAGE_TAG)
+
+deploy-docker-prod: apply-env
+	@$(shell export IMAGE_TAG=$(IMAGE_TAG))
+	@docker stack deploy -c docker-compose.prod.yml url-shrtnr -d
 
 ###
 ### MISC
 ###
+apply-env:
+	@if [ -z "$(IMAGE_TAG)" ]; then \
+		echo "ERROR: IMAGE_TAG is not set."; \
+		exit 1; \
+	fi
 
 # Clean up build artifacts
 clean:
