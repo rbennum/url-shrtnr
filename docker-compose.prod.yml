@@ -15,18 +15,16 @@ services:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASS
     env_file:
-      - dev.env
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - prod.env
     networks:
       - shortener_net
 
   shortener-main-app:
-    image: shrtnr_main:${IMAGE_TAG}
+    image: rbennum2329/shrtnr_main:${IMAGE_TAG}
     depends_on:
       - db
     env_file:
-      - dev.env
+      - prod.env
     secrets:
       - POSTGRES_NAME
       - POSTGRES_USER
@@ -35,14 +33,15 @@ services:
       - ${PORT}:${PORT}
     networks:
       - shortener_net
+      - home_shared_network
     command: ["/app/main"]
 
   shortener-redir-app:
-    image: shrtnr_redir:${IMAGE_TAG}
+    image: rbennum2329/shrtnr_redir:${IMAGE_TAG}
     depends_on:
       - db
     env_file:
-      - dev.env
+      - prod.env
     secrets:
       - POSTGRES_NAME
       - POSTGRES_USER
@@ -51,6 +50,7 @@ services:
       - ${PORT_SHORTEN}:${PORT_SHORTEN}
     networks:
       - shortener_net
+      - home_shared_network
     command: ["/app/red"]
 
 volumes:
@@ -60,6 +60,8 @@ volumes:
 networks:
   shortener_net:
     driver: overlay
+  home_shared_network:
+    external: true
 
 secrets:
   POSTGRES_PASS:

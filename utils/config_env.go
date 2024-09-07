@@ -10,6 +10,7 @@ type CommonConfig struct {
 	MainServerAddr  string
 	ShortServerPort string
 	ShortServerAddr string
+	StaticURL       string
 	DBHost          string
 	DBPort          string
 	DBName          string
@@ -34,6 +35,7 @@ func LoadConfig() (config CommonConfig) {
 	config.MainServerPort = getEnv("PORT", "")
 	config.ShortServerAddr = getEnv("ADDR_ROUTE_SHORTEN", "")
 	config.ShortServerPort = getEnv("PORT_SHORTEN", "")
+	config.StaticURL = getEnv("STATIC_URL", "")
 	config.MakeDBConfiguration()
 	return
 }
