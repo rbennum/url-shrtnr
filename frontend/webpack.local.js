@@ -2,9 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+
+dotenv.config({ path: 'local.env' });
 
 module.exports = {
-    entry: './js/index.js',
+    mode: 'development',
+    entry: './src/js/index.js',
     devtool: 'inline-source-map',
     devServer: {
         static: './dist',
@@ -23,6 +28,12 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: 'styles.css',
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'API_URL': JSON.stringify(process.env.API_URL),
+                'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            }
         })
     ],
     output: {
@@ -34,7 +45,7 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/i,
-                include: path.resolve(__dirname, 'css'),
+                include: path.resolve(__dirname, 'src/css'),
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',

@@ -23,7 +23,8 @@ const onSubmit = async (e) => {
     }
 
     try {
-        const response = await fetch('/url', {
+        const apiUrl = process.env.API_URL;
+        const response = await fetch(apiUrl + 'api/v1/url', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

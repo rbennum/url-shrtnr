@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --mode=development",
-    "build-dev": "webpack --mode=development",
-    "start-dev": "webpack serve --open --mode=development"
+    "build-local": "webpack --config webpack.local.js",
+    "start-local": "webpack serve --open --config webpack.local.js"
   },
   "keywords": [],
   "author": "rbennum",
@@ -22,5 +21,8 @@
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }
