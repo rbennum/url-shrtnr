@@ -5,7 +5,11 @@
   "scripts": {
     "watch": "webpack --watch --mode=development",
     "build-local": "webpack --config webpack.local.js",
-    "start-local": "webpack serve --open --config webpack.local.js"
+    "start-local": "webpack serve --open --config webpack.local.js",
+    "build-dev": "webpack --config webpack.dev.js",
+    "start-dev": "webpack serve --open --config webpack.dev.js",
+    "build-prod": "webpack --config webpack.prod.js",
+    "start-prod": "webpack serve --open --config webpack.prod.js"
   },
   "keywords": [],
   "author": "rbennum",

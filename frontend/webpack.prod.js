@@ -5,7 +5,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const dotenv = require('dotenv');
 const webpack = require('webpack');
 
-dotenv.config({ path: 'local.env' });
+dotenv.config({ path: 'prod.env' });
 
 module.exports = {
     mode: 'development',
