@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rbennum/url-shrtnr/internals/client"
+	"github.com/rbennum/url-shrtnr/internals/middleware"
 	"github.com/rbennum/url-shrtnr/internals/repository"
 	"github.com/rbennum/url-shrtnr/internals/route"
 	"github.com/rbennum/url-shrtnr/internals/service"
@@ -66,7 +67,7 @@ func (s *Server) newHTTPServer(ctx context.Context) *http.Server {
 	urlHandler := route.NewUrlHandler(ctx, s.urlService)
 	api := mux.PathPrefix("/api/v1").Subrouter()
 	api.Path("/url").Handler(urlHandler)
-	api.Use()
+	api.Use(middleware.LoggingMiddleware)
 	return &http.Server{
 		Addr:    fmt.Sprintf("%s:%s", s.opts.Config.ServerAddr, s.opts.Config.ServerPort),
 		Handler: mux,

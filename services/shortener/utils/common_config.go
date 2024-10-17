@@ -30,7 +30,12 @@ func getEnv(key string, secret string) string {
 			return string(data)
 		}
 	}
-	return os.Getenv(key)
+	result, flag := os.LookupEnv(key)
+	if !flag {
+		log.Warn().Msgf("Env %s doesn't exist", key)
+		return ""
+	}
+	return result
 }
 
 // Initialize common configurations from a .env file
@@ -65,6 +70,7 @@ func (conf *CommonConfig) MakeDBConfiguration() {
 		dbSetup = fmt.Sprintf("%s password=%s", dbSetup, conf.DBPass)
 	}
 	conf.DBSourceName = dbSetup
+	log.Info().Msg(dbSetup)
 }
 
 func (conf *CommonConfig) MakeDBSourceURL() {
@@ -75,4 +81,5 @@ func (conf *CommonConfig) MakeDBSourceURL() {
 		conf.DBPort,
 		conf.DBName,
 	)
+	log.Info().Msg(conf.DBSourceURL)
 }

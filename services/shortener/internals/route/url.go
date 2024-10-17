@@ -29,19 +29,16 @@ func (h *UrlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Internal helper method for POST requests
 func (h *UrlHandler) handleShortenUrl(w http.ResponseWriter, r *http.Request) {
 	var request struct {
 		OriginalUrl string `json:"original_url"`
 	}
 
-	// Parse the request body
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
 
-	// Attempt to create the shortened URL
 	link, err := h.urlService.CreateUrl(request.OriginalUrl)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to shorten URL")
@@ -58,8 +55,6 @@ func (h *UrlHandler) handleShortenUrl(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-
-	// Successful response
 	response := resp.Response{
 		Success: true,
 		Message: "URL successfully shortened.",
