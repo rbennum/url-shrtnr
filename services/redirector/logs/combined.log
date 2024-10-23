@@ -66,3 +66,78 @@
 {"level":"info","message":"Database migration completed.","timestamp":"2024-10-17 23:18:53"}
 {"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-17 23:18:53"}
 {"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-17 23:19:28"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-18 00:05:11"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-18 00:06:52"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-18 00:06:53"}
+{"level":"info","message":"Short URL: abcde","timestamp":"2024-10-18 00:06:56"}
+{"level":"info","message":"Original URL: null","timestamp":"2024-10-18 00:06:56"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-18 18:57:17"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-23 23:59:29"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-24 02:51:10"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-24 02:51:12"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-24 02:51:12"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-24 02:51:12"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-24 02:51:12"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-24 02:51:13"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-24 02:51:13"}
+{"level":"debug","message":"\u0000","timestamp":"2024-10-24 02:51:22"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-24 02:52:47"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-24 02:52:49"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-24 02:52:49"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-24 02:52:49"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-24 02:52:49"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-24 02:52:49"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-24 02:52:49"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:52:54"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:53:26"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:53:27"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:56:02"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:58:27"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 02:59:06"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 03:01:29"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 03:04:42"}
+{"level":"debug","message":{},"timestamp":"2024-10-24 03:05:18"}
+{"level":"debug","message":{"short_tag":"http://127.0.0.1:32451/RnVJy","url":"https://google.com"},"timestamp":"2024-10-24 03:06:39"}
+{"level":"debug","message":{"short_tag":"http://127.0.0.1:32451/PaSqH","url":"https://google.com"},"timestamp":"2024-10-24 03:07:39"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-24 03:08:51"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-24 03:08:52"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-24 03:08:52"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-24 03:08:52"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-24 03:08:52"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-24 03:08:52"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-24 03:08:52"}
+{"level":"debug","message":"https://google.com","timestamp":"2024-10-24 03:08:56"}
+{"level":"debug","message":"http://127.0.0.1:32451/WUGJH","timestamp":"2024-10-24 03:08:56"}
+{"level":"info","message":"Received SIGINT. Shutting down gracefully...","timestamp":"2024-10-24 03:13:13"}
+{"level":"info","message":"Initiating app","timestamp":"2024-10-24 03:13:15"}
+{"level":"info","message":"Trying to connect to amqp://localhost:5672","timestamp":"2024-10-24 03:13:15"}
+{"level":"info","message":"Connected to RabbitMQ, queue: url-shrtnr","timestamp":"2024-10-24 03:13:15"}
+{"level":"info","message":"Running database migrations...","timestamp":"2024-10-24 03:13:15"}
+{"level":"info","message":"Database migration completed.","timestamp":"2024-10-24 03:13:15"}
+{"level":"info","message":"Server listening on port 32451","timestamp":"2024-10-24 03:13:15"}
+{"level":"debug","message":"https://google.com","timestamp":"2024-10-24 03:13:19"}
+{"level":"debug","message":"http://127.0.0.1:32451/zIZWz","timestamp":"2024-10-24 03:13:19"}
+{"code":"ER_DATA_TOO_LONG","errno":1406,"level":"error","message":"Error saving data to MariaDB: insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/zIZWz', 'https://google.com') - Data too long for column 'short_tag' at row 1","sql":"insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/zIZWz', 'https://google.com')","sqlMessage":"Data too long for column 'short_tag' at row 1","sqlState":"22001","stack":"Error: insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/zIZWz', 'https://google.com') - Data too long for column 'short_tag' at row 1\n    at Packet.asError (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/packets/packet.js:738:17)\n    at Query.execute (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/commands/command.js:29:26)\n    at Connection.handlePacket (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:481:34)\n    at PacketParser.onPacket (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:97:12)\n    at PacketParser.executeStart (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/packet_parser.js:75:16)\n    at Socket.<anonymous> (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:104:25)\n    at Socket.emit (node:events:519:28)\n    at addChunk (node:internal/streams/readable:559:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)\n    at Readable.push (node:internal/streams/readable:390:5)","timestamp":"2024-10-24 03:13:19"}
+{"level":"debug","message":"https://google.com","timestamp":"2024-10-24 03:15:20"}
+{"level":"debug","message":"http://127.0.0.1:32451/uoKmR","timestamp":"2024-10-24 03:15:20"}
+{"code":"ER_DATA_TOO_LONG","errno":1406,"level":"error","message":"Error saving data to MariaDB: insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/uoKmR', 'https://google.com') - Data too long for column 'short_tag' at row 1","sql":"insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/uoKmR', 'https://google.com')","sqlMessage":"Data too long for column 'short_tag' at row 1","sqlState":"22001","stack":"Error: insert into `link_mappers` (`short_tag`, `url`) values ('http://127.0.0.1:32451/uoKmR', 'https://google.com') - Data too long for column 'short_tag' at row 1\n    at Packet.asError (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/packets/packet.js:738:17)\n    at Query.execute (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/commands/command.js:29:26)\n    at Connection.handlePacket (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:481:34)\n    at PacketParser.onPacket (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:97:12)\n    at PacketParser.executeStart (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/packet_parser.js:75:16)\n    at Socket.<anonymous> (/Users/bening/Code/url-shrtnr/services/redirector/node_modules/mysql2/lib/connection.js:104:25)\n    at Socket.emit (node:events:519:28)\n    at addChunk (node:internal/streams/readable:559:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)\n    at Readable.push (node:internal/streams/readable:390:5)","timestamp":"2024-10-24 03:15:20"}
+{"level":"debug","message":"https://google.com","timestamp":"2024-10-24 03:15:47"}
+{"level":"debug","message":"mQVij","timestamp":"2024-10-24 03:15:47"}
+{"0":1,"level":"info","message":"Data successfully saved to MariaDB:","timestamp":"2024-10-24 03:15:47"}
+{"level":"info","message":"Short URL: mQVij","timestamp":"2024-10-24 03:16:28"}
+{"level":"info","message":"Original URL: https://google.com","timestamp":"2024-10-24 03:16:28"}

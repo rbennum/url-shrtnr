@@ -1,4 +1,5 @@
 require('dotenv').config({ path: '.env.local', debug: true });
+const url = require('url');
 const { migrateDatabase, db } = require('./utils/db/driver.js');
 const logger = require('./utils/logger/logger.js');
 const { 
@@ -9,6 +10,7 @@ const {
     rabbitEvents
 } = require('./utils/rabbitmq/driver.js');
 const http = require('http');
+const { handleRedirect } = require('./internal/controllers/redirect.js');
 
 let server;
 const PORT = process.env.SERVER_PORT;
@@ -37,11 +39,6 @@ async function gracefulShutdown(signal) {
 async function startApp() {
     logger.info('Initiating app')
 
-    // fetch env vars
-    // run dotenv from the outside system, like:
-    // node -r dotenv/config index.js dotenv_config_path=.env.local \
-    // dotenv_config_debug=true
-
     // open RabbitMQ connection
     await openRabbitMQConnection();
 
@@ -53,13 +50,8 @@ async function startApp() {
 
     // start the server
     server = http.createServer((req, res) => {
-        if (req.url === '/') {
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end('Hello, world!');
-        } else {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.end('Page not found');
-        }
+        const parsedUrl = url.parse(req.url, true);
+        handleRedirect(req, res, parsedUrl);
     });
     server.listen(PORT, () => {
         logger.info(`Server listening on port ${PORT}`);
@@ -77,6 +69,16 @@ startApp().catch((error) => {
     process.on(signal, () => gracefulShutdown(signal));
 });
 
-rabbitEvents.on(rabbitEventName, (data) => {
-    // TODO: Process fetched messages here
+rabbitEvents.on(rabbitEventName, async (data) => {
+    logger.debug(data.url)
+    logger.debug(data.shortTag)
+    try {
+        const result = await db('link_mappers').insert({
+            url: data.url,
+            short_tag: data.shortTag
+        });
+        logger.info('Data successfully saved to MariaDB:', result);
+    } catch (error) {
+        logger.error('Error saving data to MariaDB:', error);
+    }
 })
