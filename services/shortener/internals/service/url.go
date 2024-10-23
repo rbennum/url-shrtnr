@@ -1,15 +1,19 @@
 package service
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/rbennum/url-shrtnr/internals/models"
+	mb "github.com/rbennum/url-shrtnr/internals/rabbitmq"
 	"github.com/rbennum/url-shrtnr/internals/repository"
 	"github.com/rbennum/url-shrtnr/utils"
+	"github.com/rs/zerolog/log"
 )
 
 type UrlService interface {
-	CreateUrl(url string) (*models.Link, error)
+	CreateUrl(ctx context.Context, url string) (*models.Link, error)
 }
 
 type urlService_Impl struct {
@@ -21,7 +25,7 @@ func NewUrlService(repo *repository.UrlRepo, config *utils.CommonConfig) UrlServ
 	return &urlService_Impl{repo: repo, config: config}
 }
 
-func (s *urlService_Impl) CreateUrl(originalUrl string) (*models.Link, error) {
+func (s *urlService_Impl) CreateUrl(ctx context.Context, originalUrl string) (*models.Link, error) {
 	// Step 1: Generate a 5-character random short_tag
 	shortTag := utils.RandomString(5)
 
@@ -34,6 +38,11 @@ func (s *urlService_Impl) CreateUrl(originalUrl string) (*models.Link, error) {
 	// Step 3: Concatenate base URL with short_tag
 	baseUrl := s.config.StaticShortURL
 	link.Tag = fmt.Sprintf("%s/%s", baseUrl, link.Tag)
+
+	msg, _ := json.Marshal(models.URLData{URL: originalUrl, ShortTag: shortTag})
+	log.Debug().
+		Msgf("%s %s", originalUrl, shortTag)
+	mb.SendMessage(msg, ctx)
 
 	return link, nil
 }

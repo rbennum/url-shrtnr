@@ -39,7 +39,7 @@ func (h *UrlHandler) handleShortenUrl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	link, err := h.urlService.CreateUrl(request.OriginalUrl)
+	link, err := h.urlService.CreateUrl(h.ctx, request.OriginalUrl)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to shorten URL")
 		response := resp.Response{

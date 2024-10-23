@@ -8,6 +8,7 @@ import (
 
 	"github.com/rbennum/url-shrtnr/internals/client"
 	"github.com/rbennum/url-shrtnr/internals/db"
+	mb "github.com/rbennum/url-shrtnr/internals/rabbitmq"
 	"github.com/rbennum/url-shrtnr/internals/server"
 	"github.com/rbennum/url-shrtnr/utils"
 	log "github.com/rs/zerolog/log"
@@ -36,6 +37,9 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Unable to migrate DB: %+v", err)
 	}
+
+	// open connection with RabbitMQ
+	mb.NewRabbitMQConnection(&config)
 
 	server := server.NewServer(
 		server.ServerOpts{

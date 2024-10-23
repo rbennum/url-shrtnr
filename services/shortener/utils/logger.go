@@ -24,7 +24,7 @@ func NewLogger(config CommonConfig) func() {
 
 	var runLogFile *os.File
 	runLogFile, err = os.OpenFile(
-		"logs/log",
+		"logs/log.log",
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 		0666,
 	)
