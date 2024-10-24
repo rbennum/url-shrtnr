@@ -63,9 +63,8 @@ func (s *Server) Run(ctx context.Context) {
 
 func (s *Server) newHTTPServer(ctx context.Context) *http.Server {
 	mux := mux.NewRouter()
-
 	urlHandler := route.NewUrlHandler(ctx, s.urlService)
-	api := mux.PathPrefix("/api/v1").Subrouter()
+	api := mux.PathPrefix("/shorten/api/v1").Subrouter()
 	api.Path("/url").Handler(urlHandler)
 	api.Use(middleware.LoggingMiddleware)
 	return &http.Server{
