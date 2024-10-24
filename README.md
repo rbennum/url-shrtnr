@@ -1,4 +1,4 @@
-# URL Shrtnr
+# url-shrtnr
 
 A microservices-based URL shortening service built with Go and Node.js. This project demonstrates the implementation of distributed systems using multiple services that communicate through message queues.
 
@@ -8,7 +8,7 @@ The project consists of three main components:
 
 ### 1. Frontend Service
 
-- Vanilla JavaScript, HTML, and CSS
+- JavaScript, HTML, and CSS
 - Bundled with Webpack
 - Clean, minimalist interface
 - Handles URLs up to 400 characters
@@ -46,7 +46,7 @@ graph LR
 
 - HTML5
 - CSS3
-- Vanilla JavaScript
+-  JavaScript
 - Webpack for bundling and optimization
 
 ### Backend Services
@@ -96,4 +96,4 @@ While currently not in active deployment, future plans include:
 - Implements real-world microservices patterns
 
 ---
-© 2024 rbennum. All rights reserved.
+© 2024 Bening Ranum. All rights reserved.
