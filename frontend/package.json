@@ -1,0 +1,32 @@
+{
+  "name": "url-shrtnr_fe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "watch": "webpack --watch --mode=development",
+    "build-local": "webpack --config webpack.local.js",
+    "start-local": "webpack serve --open --config webpack.local.js",
+    "build-dev": "webpack --config webpack.dev.js",
+    "start-dev": "webpack serve --open --config webpack.dev.js",
+    "build-prod": "webpack --config webpack.prod.js",
+    "start-prod": "webpack serve --open --config webpack.prod.js"
+  },
+  "keywords": [],
+  "author": "rbennum",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

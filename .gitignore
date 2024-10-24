@@ -1,7 +1,9 @@
 # Never include files related to the env
-*.env
+*.env*
 **/__debug*
-**/log/
+**/*.log
 go.sum
 /build
 *.txt
+**/node_modules
+./frontend/dist/

@@ -1,0 +1,87 @@
+services:
+  shortener-service:
+    build: ./services/shortener
+    container_name: shortener_service
+    ports:
+      - "32123:32123"
+    depends_on:
+      shortener-db:
+        condition: service_healthy
+    networks:
+      - shortener-network
+    env_file:
+      - ./services/shortener/.env.local
+
+  shortener-db:
+    image: postgres:16
+    container_name: shortener_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: url_shrtnr
+    ports:
+      - "32321:5432"
+    volumes:
+      - shortener_service_db:/var/lib/postgresql/data
+    networks:
+      - shortener-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redirection-service:
+    build: ./services/redirector
+    container_name: redirection_service
+    ports:
+      - "32451:32451"
+    depends_on:
+      - rabbitmq
+      - redirection-db
+    networks:
+      - shortener-network
+    env_file:
+      - ./services/redirector/.env.local
+
+  redirection-db:
+    image: mariadb:11.5
+    container_name: redirection_db
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: redirection_db
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - redirection_service_db:/var/lib/mysql
+    networks:
+      - shortener-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" 
+      - "15672:15672"
+    networks:
+      - shortener-network
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmqctl ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  shortener-network:
+    driver: bridge
+
+volumes:
+  shortener_service_db:
+  redirection_service_db:
