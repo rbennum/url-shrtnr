@@ -13,6 +13,7 @@ import (
 	"github.com/rbennum/url-shrtnr/internals/route"
 	"github.com/rbennum/url-shrtnr/internals/service"
 	"github.com/rbennum/url-shrtnr/utils"
+	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 )
 
@@ -67,8 +68,21 @@ func (s *Server) newHTTPServer(ctx context.Context) *http.Server {
 	api := mux.PathPrefix("/shorten/api/v1").Subrouter()
 	api.Path("/url").Handler(urlHandler)
 	api.Use(middleware.LoggingMiddleware)
+
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{s.opts.Config.FEPath},
+		AllowedMethods: []string{
+			http.MethodPost,
+			http.MethodGet,
+			http.MethodOptions,
+		},
+		AllowedHeaders: []string{"Content-Type"},
+		Debug:          s.opts.Config.AppEnv == "debug",
+	})
+	handler := c.Handler(mux)
+
 	return &http.Server{
 		Addr:    fmt.Sprintf("%s:%s", s.opts.Config.ServerAddr, s.opts.Config.ServerPort),
-		Handler: mux,
+		Handler: handler,
 	}
 }

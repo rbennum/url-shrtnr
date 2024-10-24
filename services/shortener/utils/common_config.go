@@ -22,6 +22,7 @@ type CommonConfig struct {
 	LogLevel        string
 	AppEnv          string
 	RabbitMQURL     string
+	FEPath          string
 }
 
 func getEnv(key string, secret string) string {
@@ -54,6 +55,7 @@ func NewConfig() (config CommonConfig) {
 	config.DBPass = getEnv("POSTGRES_PASS", "/run/secrets/POSTGRES_PASS")
 	config.DBMigrationPath = getEnv("DB_MIGRATION_PATH", "")
 	config.RabbitMQURL = getEnv("RABBITMQ_URL", "")
+	config.FEPath = getEnv("FE_PATH", "")
 	config.MakeDBConfiguration()
 	config.MakeDBSourceURL()
 	return
