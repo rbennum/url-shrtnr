@@ -1,6 +1,8 @@
 import '../css/styles.css';
 
+// Declare form handler function first
 const onSubmit = async (e) => {
+    console.log("onSubmit called");
     e.preventDefault();
 
     const form = document.getElementById('urlForm');
@@ -19,12 +21,13 @@ const onSubmit = async (e) => {
     errorMessage.classList.add('hidden');
 
     const formData = {
-        url: urlInput.value
+        original_url: urlInput.value
     }
 
     try {
         const apiUrl = process.env.API_URL;
-        const response = await fetch(apiUrl + 'api/v1/url', {
+        console.log(apiUrl)
+        const response = await fetch(apiUrl + '/url', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -36,21 +39,33 @@ const onSubmit = async (e) => {
             throw new Error('Unable to create new link. Please try again later.');
         }
 
-        const data = await response.json();
-        console.log(`Data: ${JSON.stringify(data)}`);
-        const tag = data.tag;
+        const response_data = await response.json();
+        console.log(`Data: ${JSON.stringify(response_data)}`);
+        let data = response_data.data
+        let short_url = data.short_url
 
         successMessage.classList.remove('hidden');
         errorView.classList.add('hidden');
 
         successMessage.textContent = 'URL: ';
-        successMessage.innerHTML += `<a href="http://${tag}" target="_blank">${tag}</a>`;
+        successMessage.innerHTML += `<a href="${short_url}" target="_blank">${short_url}</a>`;
     } catch (error) {
         successMessage.classList.add('hidden');
         errorView.classList.remove('hidden');
-
         errorView.textContent = `${error}`;
     }
 
     form.reset();
 };
+
+// Add the event listener when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('urlForm');
+    form.addEventListener('submit', onSubmit);
+});
+
+// Make onSubmit available globally
+window.onSubmit = onSubmit;
+
+// Export for module usage
+export { onSubmit };

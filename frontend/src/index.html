@@ -9,9 +9,9 @@
     <header>
         <h1>url shrtnr</h1>
     </header>
-    <main>
-        <form id="urlForm" onsubmit="onSubmit(event);">
-            <input type="text" id="urlInput" placeholder="Enter your URL here" required>
+    <main role="main">
+        <form id="urlForm">
+            <input type="url" id="urlInput" placeholder="Enter your URL here" required>
             <p id="errorMessage" class="hidden">URL must be 400 characters or less.</p>
             <button type="submit">Shorten URL</button>
         </form>
