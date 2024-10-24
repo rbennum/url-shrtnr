@@ -5,7 +5,6 @@ services:
     image: postgres:16.4-alpine3.19
     volumes:
       - db-data:/var/lib/postgresql/data
-    restart: always
     secrets:
       - POSTGRES_NAME
       - POSTGRES_USER
@@ -15,18 +14,16 @@ services:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASS
     env_file:
-      - dev.env
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ../backend/prod.env
     networks:
       - shortener_net
 
   shortener-main-app:
-    image: shrtnr_main:${IMAGE_TAG}
+    image: rbennum2329/shrtnr_main:${IMAGE_TAG}
     depends_on:
       - db
     env_file:
-      - dev.env
+      - ../backend/prod.env
     secrets:
       - POSTGRES_NAME
       - POSTGRES_USER
@@ -38,11 +35,11 @@ services:
     command: ["/app/main"]
 
   shortener-redir-app:
-    image: shrtnr_redir:${IMAGE_TAG}
+    image: rbennum2329/shrtnr_redir:${IMAGE_TAG}
     depends_on:
       - db
     env_file:
-      - dev.env
+      - ../backend/prod.env
     secrets:
       - POSTGRES_NAME
       - POSTGRES_USER
